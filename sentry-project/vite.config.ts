@@ -7,7 +7,7 @@ export default defineConfig({
   plugins: [
     react(),
     sentryVitePlugin({
-      org: "none-5np",
+      org: "sentry-source-maps",
       project: "javascript-react",
     }),
   ],
