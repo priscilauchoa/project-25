@@ -1,15 +1,19 @@
 
-import * as Sentry from "@sentry/react";
 
 import * as Ariakit from "@ariakit/react";
 import "./AdoptionForm.css";
+import { useDispatch } from "react-redux";
+import { addNewProfile } from "../../features/profile/profileSlice";
 
 export default function Example() {
   const form = Ariakit.useFormStore({ defaultValues: { name: "", email: "" } });
 
+  const dispatch = useDispatch()
+
   form.useSubmit(async (state) => {
     alert(JSON.stringify(state.values));
-    Sentry.captureException(new Error("3 - FORM error!"));
+    // dispatch the new profile using the submitted name value (coerce to string)
+    dispatch(addNewProfile(String(state.values.name)));
   });
 
   return (
@@ -17,8 +21,8 @@ export default function Example() {
       store={form}
       aria-labelledby="add-new-participant"
       className="wrapper"
-    >
-      <h2 id="add-new-participant" className="heading">
+
+    > <h2 id="add-new-participant" className="heading">
         Fill the form for adoption
       </h2>
       <div className="field">
@@ -42,12 +46,15 @@ export default function Example() {
         />
         <Ariakit.FormError name={form.names.email} className="error" />
       </div>
-      <div className="buttons">
+      {/* <div className="buttons">
         <Ariakit.FormReset className="button secondary reset">
-          Reset
+          <Ariakit.FormSubmit className="button">Add</Ariakit.FormSubmit>
         </Ariakit.FormReset>
         <Ariakit.FormSubmit className="button">Add</Ariakit.FormSubmit>
-      </div>
+      </div> */}
+      <button
+        onClick={() => dispatch(addNewProfile(String(form.names.name)))}
+      >Submit Profile</button>
     </Ariakit.Form>
   );
 }
